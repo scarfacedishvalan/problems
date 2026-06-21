@@ -1,0 +1,29 @@
+{
+  "categories": {
+    "invoices": {
+      "multiplier": 1.5,
+      "processing_mode": "standard",
+      "timeout_seconds": 30
+    },
+    "credits": {
+      "multiplier": 1.0,
+      "processing_mode": "standard",
+      "timeout_seconds": 30
+    },
+    "adjustments": {
+      "multiplier": 0.75,
+      "processing_mode": "extended",
+      "timeout_seconds": 60
+    },
+    "writeoffs": {
+      "multiplier": 1.0,
+      "processing_mode": "extended",
+      "timeout_seconds": 60
+    }
+  },
+  "defaults": {
+    "multiplier": 1.0,
+    "processing_mode": "standard",
+    "timeout_seconds": 30
+  }
+}
