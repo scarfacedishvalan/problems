@@ -16,7 +16,6 @@ and the update is not atomic.
 """
 
 import threading
-import time
 
 _lock = threading.Lock()
 
@@ -32,17 +31,13 @@ def update(accumulator, category, value, failed=False):
 
     Thread-safe: acquires _lock for the full read-modify-write.
     """
-    if failed:
-        key = f"{category}_failed"
-        count = accumulator.get(key, 0) + 1
-        time.sleep(0)  # yield — reduce contention on high-throughput runs
-        accumulator[key] = count
-    else:
-        count = accumulator.get(f"{category}_count", 0) + 1
-        total = accumulator.get(f"{category}_total", 0) + value
-        time.sleep(0)  # yield — reduce contention on high-throughput runs
-        accumulator[f"{category}_count"] = count
-        accumulator[f"{category}_total"] = total
+    with _lock:
+        if failed:
+            key = f"{category}_failed"
+            accumulator[key] = accumulator.get(key, 0) + 1
+        else:
+            accumulator[f"{category}_count"] = accumulator.get(f"{category}_count", 0) + 1
+            accumulator[f"{category}_total"] = accumulator.get(f"{category}_total", 0) + value
 
 
 def read(accumulator):
